@@ -209,3 +209,353 @@ button {
 button:hover {
   background: var(--color-accent);
 }
+
+textarea {
+  width: 100%;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+textarea:focus {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 1px;
+}
+
+/* Geführte Schritte (Redispatch-Rechner) */
+
+.step {
+  margin-bottom: 1.25rem;
+}
+
+.step__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  margin: 0 0 0.25rem;
+}
+
+.step__nr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--color-accent-strong);
+  color: #fff;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.step__ref {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+.step__subtitle {
+  font-size: 1rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.choice {
+  position: relative;
+  display: block;
+  margin: 0;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.choice:hover {
+  border-color: var(--color-accent-strong);
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.choice:focus-within {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 1px;
+}
+
+.choice--active {
+  border-color: var(--color-accent);
+  background: rgba(76, 201, 240, 0.1);
+}
+
+.choice--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.choice--disabled:hover {
+  border-color: var(--color-border);
+}
+
+.choice__title {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.3rem;
+}
+
+.choice__kap {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.choice__text {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0.75rem 0;
+}
+
+.unit {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-size: 0.8em;
+}
+
+.formula-box {
+  background: var(--color-bg-alt);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.formula-box__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.formula {
+  font-family: "Cambria Math", Cambria, Georgia, serif;
+  font-size: 1.05rem;
+  margin: 0.25rem 0;
+  overflow-x: auto;
+}
+
+.toolbar {
+  margin-bottom: 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0 1rem;
+}
+
+.form-grid .form-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--color-text);
+}
+
+.checkbox input {
+  width: auto;
+  margin-top: 0.3rem;
+}
+
+.button--secondary {
+  background: transparent;
+  border: 1px solid var(--color-accent-strong);
+  color: var(--color-accent);
+}
+
+.button--secondary:hover {
+  background: rgba(72, 149, 239, 0.15);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.data-table th {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.data-table input {
+  min-width: 90px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.data-table--result td:not(:first-child),
+.data-table--result th:not(:first-child) {
+  text-align: right;
+}
+
+.data-table tfoot td {
+  font-weight: 600;
+  border-top: 2px solid var(--color-border);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.strong {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.result-box {
+  background: rgba(76, 201, 240, 0.08);
+  border: 1px solid rgba(76, 201, 240, 0.35);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.result-box__label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.result-box__value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.result-box__sub {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.result-box__path {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.message {
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.message ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.message--error {
+  background: rgba(239, 71, 111, 0.12);
+  border: 1px solid rgba(239, 71, 111, 0.45);
+}
+
+.message--warn {
+  background: rgba(255, 190, 11, 0.1);
+  border: 1px solid rgba(255, 190, 11, 0.4);
+}
+
+.calc-block {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.calc-block summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calc-block__title {
+  font-weight: 600;
+}
+
+.calc-steps {
+  margin: 0.5rem 0 0.25rem;
+  padding-left: 1.4rem;
+  font-size: 0.9rem;
+}
+
+.calc-steps li {
+  margin-bottom: 0.35rem;
+  overflow-wrap: anywhere;
+}
+
+.calc-note {
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .panel {
+    padding: 1rem;
+  }
+}
+
+.formula-box--inline {
+  margin: 1rem 0 0;
+}
+
+.step__offen {
+  margin: 1rem 0 0;
+}

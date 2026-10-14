@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redispatch 2.0 Ausfallarbeit &mdash; Energie-Tools</title>
+  <link rel="stylesheet" href="../assets/css/style.css?v=3">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <div class="site-header__brand"><a href="../index.html">Energie-Tools</a></div>
+      <nav>
+        <a href="../index.html">Übersicht</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <p class="breadcrumb"><a href="../index.html">Tools</a> / Redispatch 2.0 Ausfallarbeit</p>
+
+    <h1 class="page-title">Redispatch 2.0 Ausfallarbeitsberechnung</h1>
+    <p class="page-subtitle">
+      Ermittlung der Ausfallarbeit einer technischen Ressource (TR) je Viertelstunde nach der
+      BNetzA-Festlegung BK6-23-241 „Bilanzieller Ausgleich von Redispatch-Maßnahmen (BilAReM)“,
+      Anlage Kapitel 3. Der Rechenweg wird Schritt für Schritt angezeigt.
+    </p>
+
+    <section class="panel step" id="step-fall">
+      <h2 class="step__title"><span class="step__nr">1</span> Fall, Richtung und Leistungslimitierung</h2>
+      <p class="step__ref">Kapitel 3.1 – Bestimmung des Werts der Leistungslimitierung</p>
+      <div class="choice-grid" id="choice-fall"></div>
+      <h3 class="step__subtitle">Richtung des Redispatch</h3>
+      <div class="choice-grid" id="choice-richtung"></div>
+      <h3 class="step__subtitle">Ermittlung der Leistungslimitierung</h3>
+      <div class="choice-grid" id="choice-limitierung"></div>
+      <div class="formula-box formula-box--inline" id="limitierung-formel" hidden></div>
+      <p class="message message--warn step__offen" id="fall-offen"></p>
+    </section>
+
+    <section class="panel step" id="step-traeger" hidden>
+      <h2 class="step__title"><span class="step__nr">2</span> Energieträger / Art der Erzeugung</h2>
+      <p class="step__ref">Kapitel 3.2 (fluktuierende Erzeugung) und 3.3 (nicht-fluktuierende Erzeugung)</p>
+      <div class="choice-grid" id="choice-traeger"></div>
+    </section>
+
+    <section class="panel step" id="step-verfahren" hidden>
+      <h2 class="step__title"><span class="step__nr">3</span> Abrechnungsvariante</h2>
+      <p class="step__ref" id="verfahren-ref"></p>
+      <div class="choice-grid" id="choice-verfahren"></div>
+      <div id="verfahren-hinweis"></div>
+    </section>
+
+    <section class="panel step" id="step-eingaben" hidden>
+      <h2 class="step__title"><span class="step__nr">4</span> Eingabeparameter</h2>
+      <div class="formula-box" id="formel"></div>
+      <div class="toolbar">
+        <button type="button" class="button--secondary" id="beispiel-laden">Beispielwerte laden</button>
+      </div>
+      <div id="eingaben"></div>
+      <button type="button" id="berechnen">Ausfallarbeit berechnen</button>
+    </section>
+
+    <section class="panel step" id="step-ergebnis" hidden>
+      <h2 class="step__title"><span class="step__nr">5</span> Ergebnis und Rechenweg</h2>
+      <div id="ergebnis"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Energie-Tools &mdash; statisch, ohne Backend. Angaben ohne Gewähr; maßgeblich ist der Text der Festlegung.
+  </footer>
+
+  <script src="../assets/js/redispatch-ausfallarbeit-methoden.js?v=3"></script>
+  <script src="../assets/js/redispatch-ausfallarbeit.js?v=3"></script>
+</body>
+</html>
