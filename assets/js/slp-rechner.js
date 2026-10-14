@@ -39,24 +39,52 @@ profileSelect.addEventListener('change', () => {
   document.getElementById('param-bh').value = profile.bh;
   document.getElementById('param-mw').value = profile.mw;
   document.getElementById('param-bw').value = profile.bw;
+  berechnen();
 });
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
+const FELDER = [
+  { id: 'param-a', name: 'Parameter A' },
+  { id: 'param-b', name: 'Parameter B' },
+  { id: 'param-c', name: 'Parameter C' },
+  { id: 'param-d', name: 'Parameter D' },
+  { id: 'param-mh', name: 'Parameter mH' },
+  { id: 'param-bh', name: 'Parameter bH' },
+  { id: 'param-mw', name: 'Parameter mW' },
+  { id: 'param-bw', name: 'Parameter bW' },
+  { id: 'temperatur', name: 'Temperatur θ' },
+];
 
-  const a = Number(document.getElementById('param-a').value);
-  const b = Number(document.getElementById('param-b').value);
-  const c = Number(document.getElementById('param-c').value);
-  const d = Number(document.getElementById('param-d').value);
-  const mh = Number(document.getElementById('param-mh').value);
-  const bh = Number(document.getElementById('param-bh').value);
-  const mw = Number(document.getElementById('param-mw').value);
-  const bw = Number(document.getElementById('param-bw').value);
-  const theta = Number(document.getElementById('temperatur').value);
+// Rechnet bei jeder Eingabe neu; solange Werte fehlen, wird angezeigt welche.
+function berechnen() {
+  const werte = {};
+  const fehlend = [];
+  for (const feld of FELDER) {
+    const input = document.getElementById(feld.id);
+    const leer = input.value.trim() === '';
+    input.classList.toggle('is-missing', leer);
+    if (leer) fehlend.push(feld.name);
+    werte[feld.id] = Number(input.value);
+  }
 
-  const h = calculateHValue(a, b, c, d, mh, bh, mw, bw, theta);
+  if (fehlend.length) {
+    resultEl.className = 'message message--warn';
+    const tipp = fehlend.some((name) => name.startsWith('Parameter')) ? ' Tipp: Ein SLP-Profil oben füllt die Parameter A bis bW aus.' : '';
+    resultEl.textContent = `Für das Ergebnis fehlt noch: ${fehlend.join(', ')}.${tipp}`;
+    return;
+  }
 
-  resultEl.textContent = Number.isFinite(h)
-    ? `h-Wert: ${h.toFixed(4)} kWh/Tag`
+  const h = calculateHValue(
+    werte['param-a'], werte['param-b'], werte['param-c'], werte['param-d'],
+    werte['param-mh'], werte['param-bh'], werte['param-mw'], werte['param-bw'],
+    werte.temperatur,
+  );
+
+  resultEl.className = Number.isFinite(h) ? 'result-box' : 'message message--error';
+  resultEl.innerHTML = Number.isFinite(h)
+    ? `<div class="result-box__label">h-Wert</div><div class="result-box__value">${h.toFixed(4)} <span class="result-box__sub">kWh/Tag</span></div>`
     : 'h-Wert konnte nicht berechnet werden (ungültige Eingabe, z. B. θ = θ0 = 40 °C).';
-});
+}
+
+form.addEventListener('input', berechnen);
+form.addEventListener('submit', (event) => event.preventDefault());
+berechnen();

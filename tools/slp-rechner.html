@@ -4,15 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SLP-Rechner &mdash; Energie-Tools</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css?v=7">
 </head>
 <body>
   <header class="site-header">
     <div class="site-header__inner">
       <div class="site-header__brand"><a href="../index.html">Energie-Tools</a></div>
-      <nav>
-        <a href="../index.html">Übersicht</a>
-      </nav>
     </div>
   </header>
 
@@ -24,60 +21,65 @@
 
     <div class="panel">
       <form id="slp-form">
-        <div class="form-row">
-          <label for="profile-select">SLP-Profil (Koeffizienten aus BDEW-Anlage 6 vorausfüllen)</label>
+        <div class="field field--select">
+          <label for="profile-select">SLP-Profil</label>
           <select id="profile-select">
             <option value="">— manuell eingeben —</option>
           </select>
+          <span class="field__hint">füllt die Koeffizienten aus BDEW-Anlage 6 vor</span>
         </div>
-        <div class="form-row">
+        <div class="field">
           <label for="param-a">Parameter A</label>
           <input type="number" id="param-a" step="any" required>
+          <span class="field__hint">Sigmoid</span>
         </div>
-        <div class="form-row">
+        <div class="field">
           <label for="param-b">Parameter B</label>
           <input type="number" id="param-b" step="any" required>
+          <span class="field__hint">Sigmoid</span>
         </div>
-        <div class="form-row">
+        <div class="field">
           <label for="param-c">Parameter C</label>
           <input type="number" id="param-c" step="any" required>
+          <span class="field__hint">Sigmoid</span>
         </div>
-        <div class="form-row">
+        <div class="field">
           <label for="param-d">Parameter D</label>
           <input type="number" id="param-d" step="any" required>
+          <span class="field__hint">Sigmoid, Sockel</span>
         </div>
-        <div class="form-row">
-          <label for="param-mh">Parameter mH (Heizgas-Gerade, Steigung)</label>
+        <div class="field">
+          <label for="param-mh">Parameter mH</label>
           <input type="number" id="param-mh" step="any" required>
+          <span class="field__hint">Heizgas-Gerade, Steigung</span>
         </div>
-        <div class="form-row">
-          <label for="param-bh">Parameter bH (Heizgas-Gerade, Achsenabschnitt)</label>
+        <div class="field">
+          <label for="param-bh">Parameter bH</label>
           <input type="number" id="param-bh" step="any" required>
+          <span class="field__hint">Heizgas-Gerade, Achsenabschnitt</span>
         </div>
-        <div class="form-row">
-          <label for="param-mw">Parameter mW (Warmwasser-Gerade, Steigung)</label>
+        <div class="field">
+          <label for="param-mw">Parameter mW</label>
           <input type="number" id="param-mw" step="any" required>
+          <span class="field__hint">Warmwasser-Gerade, Steigung</span>
         </div>
-        <div class="form-row">
-          <label for="param-bw">Parameter bW (Warmwasser-Gerade, Achsenabschnitt)</label>
+        <div class="field">
+          <label for="param-bw">Parameter bW</label>
           <input type="number" id="param-bw" step="any" required>
+          <span class="field__hint">Warmwasser-Gerade, Achsenabschnitt</span>
         </div>
-        <div class="form-row">
-          <label for="temperatur">Temperatur θ (°C)</label>
+        <div class="field">
+          <label for="temperatur">Temperatur θ <span class="unit">[°C]</span></label>
           <input type="number" id="temperatur" step="any" required>
+          <span class="field__hint">Tagesmitteltemperatur</span>
         </div>
-        <button type="submit">Berechnen</button>
       </form>
 
-      <div id="result" class="form-row" style="margin-top: 1.5rem;"></div>
+      <div id="result" class="result-box" style="margin-top: 1rem;"></div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    Energie-Tools &mdash; statisch, ohne Backend.
-  </footer>
-
-  <script src="../assets/js/slp-profile.js"></script>
-  <script src="../assets/js/slp-rechner.js"></script>
+  <script src="../assets/js/slp-profile.js?v=7"></script>
+  <script src="../assets/js/slp-rechner.js?v=7"></script>
 </body>
 </html>

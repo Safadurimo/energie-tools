@@ -1,13 +1,20 @@
 :root {
-  --color-bg: #0f172a;
-  --color-bg-alt: #16213e;
-  --color-surface: #1c2541;
-  --color-surface-hover: #233156;
-  --color-border: #2a3a63;
-  --color-text: #e8ecf6;
-  --color-text-muted: #9aa5c2;
-  --color-accent: #4cc9f0;
-  --color-accent-strong: #4895ef;
+  color-scheme: light;
+  --color-bg: #f3f5f9;
+  --color-bg-alt: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f0f5fb;
+  --color-border: #d6dde8;
+  --color-text: #1b2433;
+  --color-text-muted: #5b6678;
+  --color-accent: #0b6fb8;
+  --color-accent-strong: #0a5c9c;
+  --color-accent-soft: rgba(11, 111, 184, 0.07);
+  --color-accent-soft-border: rgba(11, 111, 184, 0.35);
+  --color-warn-bg: #fff7e0;
+  --color-warn-border: #e8b931;
+  --color-error-bg: #fdecef;
+  --color-error-border: #e0607a;
   --radius: 10px;
   --max-width: 1000px;
 }
@@ -23,7 +30,7 @@ html, body {
 
 body {
   font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+  background: var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
   line-height: 1.5;
@@ -65,16 +72,6 @@ a:hover {
 
 .site-header__brand a:hover {
   text-decoration: none;
-  color: var(--color-accent);
-}
-
-.site-header nav a {
-  margin-left: 1rem;
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-}
-
-.site-header nav a:hover {
   color: var(--color-accent);
 }
 
@@ -128,12 +125,6 @@ main {
   margin: 0;
 }
 
-.tool-card--placeholder {
-  opacity: 0.55;
-  cursor: default;
-  pointer-events: none;
-}
-
 .breadcrumb {
   margin: 0 0 1.5rem;
   font-size: 0.9rem;
@@ -154,8 +145,8 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--color-accent);
-  background: rgba(76, 201, 240, 0.12);
-  border: 1px solid rgba(76, 201, 240, 0.3);
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-soft-border);
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
   margin-bottom: 0.75rem;
@@ -191,10 +182,6 @@ input:focus, select:focus {
   outline-offset: 1px;
 }
 
-.form-row {
-  margin-bottom: 1rem;
-}
-
 button {
   background: var(--color-accent-strong);
   color: #fff;
@@ -212,6 +199,7 @@ button:hover {
 
 textarea {
   width: 100%;
+  max-width: 16rem;
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   color: var(--color-text);
@@ -301,7 +289,7 @@ textarea:focus {
 
 .choice--active {
   border-color: var(--color-accent);
-  background: rgba(76, 201, 240, 0.1);
+  background: var(--color-accent-soft);
 }
 
 .choice--disabled {
@@ -373,18 +361,6 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 0 1rem;
-}
-
-.form-grid .form-row {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
 .checkbox {
   display: flex;
   align-items: flex-start;
@@ -404,7 +380,7 @@ textarea:focus {
 }
 
 .button--secondary:hover {
-  background: rgba(72, 149, 239, 0.15);
+  background: var(--color-accent-soft);
 }
 
 .table-wrap {
@@ -413,7 +389,6 @@ textarea:focus {
 }
 
 .data-table {
-  width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
@@ -432,8 +407,8 @@ textarea:focus {
 }
 
 .data-table input {
-  min-width: 90px;
-  padding: 0.35rem 0.5rem;
+  width: 7.5rem;
+  padding: 0.3rem 0.5rem;
   font-size: 0.9rem;
 }
 
@@ -457,8 +432,8 @@ textarea:focus {
 }
 
 .result-box {
-  background: rgba(76, 201, 240, 0.08);
-  border: 1px solid rgba(76, 201, 240, 0.35);
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-soft-border);
   border-radius: var(--radius);
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
@@ -500,13 +475,13 @@ textarea:focus {
 }
 
 .message--error {
-  background: rgba(239, 71, 111, 0.12);
-  border: 1px solid rgba(239, 71, 111, 0.45);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
 }
 
 .message--warn {
-  background: rgba(255, 190, 11, 0.1);
-  border: 1px solid rgba(255, 190, 11, 0.4);
+  background: var(--color-warn-bg);
+  border: 1px solid var(--color-warn-border);
 }
 
 .calc-block {
@@ -558,4 +533,64 @@ textarea:focus {
 
 .step__offen {
   margin: 1rem 0 0;
+}
+
+/* Kompakte Feldzeile: Bezeichnung | schmales Eingabefeld | Erläuterung */
+
+.field {
+  display: grid;
+  grid-template-columns: 13rem 9rem 1fr;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.field label {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.field input,
+.field select {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.95rem;
+}
+
+.field--wide {
+  grid-template-columns: 13rem 14rem 1fr;
+}
+
+.field--select {
+  grid-template-columns: 13rem minmax(14rem, 26rem) 1fr;
+}
+
+.field__hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+  .field,
+  .field--wide,
+  .field--select {
+    grid-template-columns: 1fr minmax(8rem, 12rem);
+  }
+
+  .field__hint {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Noch fehlende oder ungültige Eingaben */
+
+input.is-missing,
+textarea.is-missing {
+  border-color: var(--color-warn-border);
+  background: var(--color-warn-bg);
+}
+
+.message .hint {
+  margin: 0.5rem 0 0;
 }

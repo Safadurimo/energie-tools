@@ -62,12 +62,12 @@ const SERIEN_FELDER = {
 };
 
 const PARAM_FELDER = {
-  pInst: { sym: 'P<sub>inst</sub>', titel: 'Installierte Leistung / Nennleistung der TR', einheit: 'kW' },
-  p0: { sym: 'P<sub>0</sub>', titel: 'Letzter vollständig gemessener Leistungsmittelwert vor der Maßnahme (uneingeschränkte Einspeisung)', einheit: 'kW' },
-  pWR: { sym: 'P<sub>WR</sub>', titel: 'Wechselrichterleistung der TR', einheit: 'kW' },
-  pVzIst: { sym: 'P<sub>VZ,ist</sub>', titel: 'Durchschnittliche Ist-Einspeisung im Vergleichszeitraum (nur ¼ h mit ≥ 10 % der Nennleistung)', einheit: 'kW' },
-  gVz: { sym: 'G<sub>VZ</sub>', titel: 'Durchschnittliche Einstrahlleistung im Vergleichszeitraum', einheit: 'kW/m²' },
-  kfv: { sym: 'KF<sub>V</sub>', titel: 'Verlustfaktor parkinterne Verluste (E<sub>Einsp</sub> / ΣE<sub>WEA</sub>, 12 Monate)', einheit: '–' },
+  pInst: { sym: 'P<sub>inst</sub>', kurz: 'Nennleistung', titel: 'Installierte Leistung / Nennleistung der TR', einheit: 'kW' },
+  p0: { sym: 'P<sub>0</sub>', kurz: 'Letzter Messwert', titel: 'Letzter vollständig gemessener Leistungsmittelwert vor der Maßnahme (uneingeschränkte Einspeisung)', einheit: 'kW' },
+  pWR: { sym: 'P<sub>WR</sub>', kurz: 'Wechselrichter', titel: 'Wechselrichterleistung der TR', einheit: 'kW' },
+  pVzIst: { sym: 'P<sub>VZ,ist</sub>', kurz: 'Ist-Einspeisung VZ', titel: 'Durchschnittliche Ist-Einspeisung im Vergleichszeitraum (nur ¼ h mit ≥ 10 % der Nennleistung)', einheit: 'kW' },
+  gVz: { sym: 'G<sub>VZ</sub>', kurz: 'Einstrahlung VZ', titel: 'Durchschnittliche Einstrahlleistung im Vergleichszeitraum', einheit: 'kW/m²' },
+  kfv: { sym: 'KF<sub>V</sub>', kurz: 'Verlustfaktor', titel: 'Parkinterne Verluste: E<sub>Einsp</sub> / ΣE<sub>WEA</sub> über 12 Monate, im Intervall ]0; 1[', einheit: '–' },
 };
 
 const state = {
@@ -249,12 +249,13 @@ function renderSchritte() {
 
   const schritt3Fertig = schritt2Fertig && state.verfahren;
   el('step-eingaben').hidden = !schritt3Fertig;
+  el('step-ergebnis').hidden = !schritt3Fertig;
   if (schritt3Fertig) renderEingaben();
 }
 
 function aenderungAuswahl() {
-  el('step-ergebnis').hidden = true;
   renderSchritte();
+  aktualisieren();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -263,9 +264,10 @@ function aenderungAuswahl() {
 
 function feldHtml(key, def, wert) {
   return `
-    <div class="form-row">
-      <label for="param-${key}">${def.sym} – ${def.titel} <span class="unit">[${def.einheit}]</span></label>
+    <div class="field">
+      <label for="param-${key}">${def.kurz} ${def.sym} <span class="unit">[${def.einheit}]</span></label>
       <input type="text" inputmode="decimal" id="param-${key}" data-param="${key}" value="${escapeHtml(wert)}">
+      <span class="field__hint">${def.titel}</span>
     </div>`;
 }
 
@@ -278,26 +280,25 @@ function renderEingaben() {
 
   let html = `
     <h3 class="step__subtitle">Zeitraum der Redispatch-Maßnahme</h3>
-    <div class="form-grid">
-      <div class="form-row">
-        <label for="in-beginn">Beginn der ersten Viertelstunde${state.traeger === 'solar' && state.verfahren === 'pauschal' ? ' <span class="unit">(UTC+1, also MEZ – im Sommer 1 h vor MESZ)</span>' : ''}</label>
-        <input type="datetime-local" id="in-beginn" step="900" value="${escapeHtml(state.beginn)}">
-      </div>
-      <div class="form-row">
-        <label for="in-anzahl">Anzahl Viertelstunden</label>
-        <input type="number" id="in-anzahl" min="1" max="2976" step="1" value="${state.anzahl}">
-      </div>
+    <div class="field field--wide">
+      <label for="in-beginn">Beginn</label>
+      <input type="datetime-local" id="in-beginn" step="900" value="${escapeHtml(state.beginn)}">
+      <span class="field__hint">Beginn der ersten Viertelstunde${state.traeger === 'solar' && state.verfahren === 'pauschal' ? ' – in UTC+1 (MEZ), im Sommer also 1 h vor der MESZ-Uhrzeit' : ''}</span>
+    </div>
+    <div class="field">
+      <label for="in-anzahl">Anzahl Viertelstunden</label>
+      <input type="number" id="in-anzahl" min="1" max="2976" step="1" value="${state.anzahl}">
+      <span class="field__hint">Dauer der Maßnahme in ¼ h</span>
     </div>`;
 
   if (b.params.length) {
-    html += '<h3 class="step__subtitle">Anlagenparameter</h3><div class="form-grid">';
+    html += '<h3 class="step__subtitle">Anlagenparameter</h3>';
     for (const key of b.params) {
       const def = key === 'pInst' && state.traeger === 'solar'
-        ? { ...PARAM_FELDER.pInst, titel: 'Installierte Nennleistung (Summe der Modulnennleistungen)' }
+        ? { ...PARAM_FELDER.pInst, titel: 'Installierte Nennleistung = Summe der Modulnennleistungen' }
         : PARAM_FELDER[key];
       html += feldHtml(key, def, state.params[key]);
     }
-    html += '</div>';
   }
 
   if (b.kennlinie) {
@@ -343,8 +344,24 @@ function renderSerien() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Eingabe-Events (Delegation, damit beim Tippen nichts neu gerendert wird)
+// Eingabe-Events (Delegation, damit beim Tippen nichts neu gerendert wird).
+// Das Ergebnis wird nach jeder Eingabe leicht verzögert neu berechnet.
 // ---------------------------------------------------------------------------------------------
+
+let aktualisierungTimer = null;
+
+// Welche Rechenwege aufgeklappt sind, bleibt über automatische Neuberechnungen hinweg erhalten.
+const offeneRechenwege = new Set(['0']);
+el('ergebnis').addEventListener('toggle', (e) => {
+  if (!e.target.dataset.idx) return;
+  if (e.target.open) offeneRechenwege.add(e.target.dataset.idx);
+  else offeneRechenwege.delete(e.target.dataset.idx);
+}, true);
+
+function planeAktualisierung() {
+  clearTimeout(aktualisierungTimer);
+  aktualisierungTimer = setTimeout(aktualisieren, 150);
+}
 
 el('eingaben').addEventListener('input', (e) => {
   const t = e.target;
@@ -352,6 +369,8 @@ el('eingaben').addEventListener('input', (e) => {
   else if (t.dataset.serie) (state.serien[t.dataset.serie] ||= [])[+t.dataset.idx] = t.value;
   else if (t.dataset.vz) state.vz[+t.dataset.vz][t.dataset.feld] = t.value;
   else if (t.id === 'in-kennlinie') state.kennlinie = t.value;
+  else return;
+  planeAktualisierung();
 });
 
 el('eingaben').addEventListener('change', (e) => {
@@ -363,7 +382,10 @@ el('eingaben').addEventListener('change', (e) => {
     state.anzahl = Math.min(2976, Math.max(1, Math.round(Number(t.value)) || 1));
     t.value = state.anzahl;
     renderSerien();
+  } else {
+    return;
   }
+  aktualisieren();
 });
 
 // Mehrzeiliges Einfügen aus einer Tabellenkalkulation füllt nach unten und nach rechts auf.
@@ -388,63 +410,125 @@ el('eingaben').addEventListener('paste', (e) => {
     el('in-anzahl').value = state.anzahl;
   }
   renderSerien();
+  aktualisieren();
 });
 
 // ---------------------------------------------------------------------------------------------
 // Einlesen, Prüfen, Berechnen
 // ---------------------------------------------------------------------------------------------
 
+function aufzaehlen(liste, max = 3) {
+  return liste.length > max ? `${liste.slice(0, max).join(', ')} und ${liste.length - max} weiteren` : liste.join(', ');
+}
+
+// Liefert die Rechengrößen sowie die Liste der noch fehlenden bzw. ungültigen Angaben.
+// markiert enthält Schlüssel der betroffenen Eingabefelder (param:…, serie:…:i, vz:i:…, kennlinie, beginn).
 function einlesen() {
   const b = benoetigt();
-  const fehler = [];
+  const fehlend = [];
+  const markiert = new Set();
   const params = { windBin: state.verfahren === 'windbin' };
 
-  for (const key of b.params) {
-    const n = zahl(state.params[key]);
-    if (n === null || Number.isNaN(n)) fehler.push(`${PARAM_FELDER[key].sym} (${PARAM_FELDER[key].titel}) fehlt oder ist keine Zahl.`);
-    params[key] = n;
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(state.beginn || '')) {
+    fehlend.push('Beginn der Maßnahme');
+    markiert.add('beginn');
   }
-  if (b.params.includes('pInst') && params.pInst <= 0) fehler.push('P<sub>inst</sub> muss größer als 0 sein.');
-  if (b.params.includes('gVz') && params.gVz <= 0) fehler.push('G<sub>VZ</sub> muss größer als 0 sein.');
+
+  for (const key of b.params) {
+    const def = PARAM_FELDER[key];
+    const n = zahl(state.params[key]);
+    if (n === null) fehlend.push(`${def.kurz} ${def.sym}`);
+    else if (Number.isNaN(n)) fehlend.push(`${def.kurz} ${def.sym}: „${escapeHtml(state.params[key])}“ ist keine gültige Zahl`);
+    else if ((key === 'pInst' || key === 'gVz') && n <= 0) fehlend.push(`${def.kurz} ${def.sym} muss größer als 0 sein`);
+    else {
+      params[key] = n;
+      continue;
+    }
+    markiert.add(`param:${key}`);
+  }
 
   if (b.kennlinie) {
     const kl = parseKennlinie(state.kennlinie);
-    fehler.push(...kl.fehler);
+    const meldungen = String(state.kennlinie || '').trim() ? kl.fehler : ['Leistungskennlinie (mindestens zwei Wertepaare v;P)'];
+    if (meldungen.length) {
+      fehlend.push(...meldungen);
+      markiert.add('kennlinie');
+    }
     params.kennlinie = kl.punkte;
   }
 
   if (b.vz) {
+    const luecken = { v: 0, pIst: 0 };
     params.vz = state.vz.map((q, i) => {
-      const v = zahl(q.v);
-      const pIst = zahl(q.pIst);
-      if (v === null || Number.isNaN(v) || pIst === null || Number.isNaN(pIst)) fehler.push(`Vergleichszeitraum Viertelstunde ${i + 1}: Windgeschwindigkeit und P<sub>VZ,ist</sub> angeben.`);
-      return { v, pIst };
+      const r = {};
+      for (const f of ['v', 'pIst']) {
+        const n = zahl(q[f]);
+        if (n === null || Number.isNaN(n)) {
+          luecken[f]++;
+          markiert.add(`vz:${i}:${f}`);
+        }
+        r[f] = n;
+      }
+      return r;
     });
+    if (luecken.v) fehlend.push(`Vergleichszeitraum: Windgeschwindigkeit v in ${luecken.v} von 4 Viertelstunden`);
+    if (luecken.pIst) fehlend.push(`Vergleichszeitraum: P<sub>VZ,ist</sub> in ${luecken.pIst} von 4 Viertelstunden`);
   }
 
-  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(state.beginn || '')) fehler.push('Beginn der Maßnahme fehlt.');
   const qs = viertelstunden();
+  const leer = {};
+  const ungueltig = {};
   const zeilen = qs.map((q, i) => {
     const r = { label: q.label, zeit: q.zeit };
     for (const key of b.serien) {
       const n = zahl((state.serien[key] || [])[i]);
-      const def = SERIEN_FELDER[key];
-      if (Number.isNaN(n) || (n === null && !def.optional)) fehler.push(`${q.label}: ${def.sym} (${def.titel}) fehlt oder ist keine Zahl.`);
-      r[key] = n;
+      if (Number.isNaN(n)) (ungueltig[key] ||= []).push(q.label);
+      else if (n === null && !SERIEN_FELDER[key].optional) (leer[key] ||= []).push(q.label);
+      else {
+        r[key] = n;
+        continue;
+      }
+      markiert.add(`serie:${key}:${i}`);
     }
     return r;
   });
+  for (const key of b.serien) {
+    const def = SERIEN_FELDER[key];
+    if (leer[key]) {
+      const umfang = leer[key].length === qs.length ? `in allen ${qs.length}` : `in ${leer[key].length} von ${qs.length}`;
+      fehlend.push(`${def.sym} (${def.titel}) ${umfang} Viertelstunden`);
+    }
+    if (ungueltig[key]) fehlend.push(`${def.sym}: keine gültige Zahl in ${aufzaehlen(ungueltig[key])}`);
+  }
 
-  return { params, zeilen, fehler };
+  return { params, zeilen, fehlend, markiert };
 }
 
-function berechnen() {
-  const { params, zeilen, fehler } = einlesen();
-  el('step-ergebnis').hidden = false;
-  if (fehler.length) {
-    const max = 12;
-    el('ergebnis').innerHTML = `<div class="message message--error"><strong>Bitte Eingaben ergänzen:</strong><ul>${fehler.slice(0, max).map((f) => `<li>${f}</li>`).join('')}${fehler.length > max ? `<li>… und ${fehler.length - max} weitere</li>` : ''}</ul></div>`;
-    el('step-ergebnis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+function markieren(markiert) {
+  el('eingaben').querySelectorAll('input, textarea').forEach((inp) => {
+    const d = inp.dataset;
+    let key = null;
+    if (d.param) key = `param:${d.param}`;
+    else if (d.serie) key = `serie:${d.serie}:${d.idx}`;
+    else if (d.vz) key = `vz:${d.vz}:${d.feld}`;
+    else if (inp.id === 'in-kennlinie') key = 'kennlinie';
+    else if (inp.id === 'in-beginn') key = 'beginn';
+    inp.classList.toggle('is-missing', key !== null && markiert.has(key));
+  });
+}
+
+function aktualisieren() {
+  clearTimeout(aktualisierungTimer);
+  if (el('step-eingaben').hidden) return;
+  const { params, zeilen, fehlend, markiert } = einlesen();
+  markieren(markiert);
+  if (fehlend.length) {
+    el('ergebnis').innerHTML = `
+      <div class="message message--warn">
+        <strong>Für das Ergebnis fehlt noch:</strong>
+        <ul>${fehlend.map((f) => `<li>${f}</li>`).join('')}</ul>
+        <p class="hint">Die betroffenen Felder sind oben markiert. Das Ergebnis erscheint automatisch, sobald alles ausgefüllt ist.</p>
+      </div>`;
     return;
   }
   let erg;
@@ -455,7 +539,6 @@ function berechnen() {
     return;
   }
   renderErgebnis(erg);
-  el('step-ergebnis').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function auswahlText() {
@@ -494,7 +577,7 @@ function renderErgebnis(erg) {
     <h3 class="step__subtitle">Rechenweg</h3>
     ${erg.vorbereitung.length ? `<div class="calc-block"><div class="calc-block__title">Vorab: einmalig zu bestimmende Größen</div><ol class="calc-steps">${erg.vorbereitung.map((s) => `<li>${s}</li>`).join('')}</ol></div>` : ''}
     ${erg.zeilen.map((z, i) => `
-      <details class="calc-block" ${i === 0 ? 'open' : ''}>
+      <details class="calc-block" data-idx="${i}" ${offeneRechenwege.has(String(i)) ? 'open' : ''}>
         <summary>Viertelstunde ${z.label}: W<sub>A,i</sub> = ${fmt(z.wa)} kWh</summary>
         <ol class="calc-steps">${z.schritte.map((s) => `<li>${s}</li>`).join('')}</ol>
       </details>`).join('')}
@@ -565,11 +648,10 @@ function beispielLaden() {
   }
   if (v === 'pauschal' && t === 'solar') state.beginn = '2026-06-10T08:30';
   state.serien = s;
-  el('step-ergebnis').hidden = true;
   renderEingaben();
+  aktualisieren();
 }
 
 el('beispiel-laden').addEventListener('click', beispielLaden);
-el('berechnen').addEventListener('click', berechnen);
 
 renderSchritte();
