@@ -20,7 +20,9 @@ kein Build-Schritt, kein Backend. Deployment per GitHub Actions auf GitHub Pages
 - Reine Rechenfunktionen von DOM-Code trennen, damit sie isoliert prüfbar sind.
 - Einzige Ausnahme: GoatCounter-Besucherstatistik (`safadurimo.goatcounter.com`, cookielos, ohne Consent-Banner)
   per `<script data-goatcounter=…>` vor `</head>` – auf jeder neuen Seite mit einbinden.
-- Neue Tools: Seite unter `tools/`, Kachel in `index.html` ergänzen.
+- Neue Tools: Seite unter `tools/`, Kachel in `index.html` ergänzen, URL in `sitemap.xml` eintragen.
+- SEO im `<head>` jeder Seite: sprechender `<title>`, `meta description`, `canonical` und `og:*`-Tags
+  mit absoluter URL unter `https://safadurimo.github.io/energie-tools/`.
 - Eingaben als kompakte Feldzeile (`.field`: Bezeichnung | schmales Feld | Erläuterung).
 - Kein Berechnen-Button: Ergebnis wird bei jeder Eingabe neu berechnet; solange etwas fehlt, listet
   der Ergebnisbereich die fehlenden Angaben und die Felder werden mit `.is-missing` markiert.
