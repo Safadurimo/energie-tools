@@ -18,6 +18,8 @@ kein Build-Schritt, kein Backend. Deployment per GitHub Actions auf GitHub Pages
 - Keine Frameworks, keine externen Abhängigkeiten, keine Bundler. Skripte per `<script src>` einbinden.
 - Formeln im JS-Kommentar mit Quelle (Leitfaden/Festlegung, Anlage, Stand) dokumentieren.
 - Reine Rechenfunktionen von DOM-Code trennen, damit sie isoliert prüfbar sind.
+- Einzige Ausnahme: GoatCounter-Besucherstatistik (`safadurimo.goatcounter.com`, cookielos, ohne Consent-Banner)
+  per `<script data-goatcounter=…>` vor `</head>` – auf jeder neuen Seite mit einbinden.
 - Neue Tools: Seite unter `tools/`, Kachel in `index.html` ergänzen.
 - Eingaben als kompakte Feldzeile (`.field`: Bezeichnung | schmales Feld | Erläuterung).
 - Kein Berechnen-Button: Ergebnis wird bei jeder Eingabe neu berechnet; solange etwas fehlt, listet
